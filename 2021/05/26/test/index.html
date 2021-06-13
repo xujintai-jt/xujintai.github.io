@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/user.jpg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/user.jpg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Vue," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="diff算法的Patch函数👍🦄 patch（oldVnode，newVnode）1.判断oldVnode是否为DOM，若是DOM则转化为Vnode。2.比较oldVnode与newVnode是否为相同节点。 若不是相同节点，则添加newVnode、删除oldVnode（注意添删顺序）。  当newVnode没有Children、或者Children长度为0时，createElement函数将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="diff算法的Patch函数">
+<meta property="og:url" content="https://xujintai123.com/2021/05/26/test/index.html">
+<meta property="og:site_name" content="xujintai">
+<meta property="og:description" content="diff算法的Patch函数👍🦄 patch（oldVnode，newVnode）1.判断oldVnode是否为DOM，若是DOM则转化为Vnode。2.比较oldVnode与newVnode是否为相同节点。 若不是相同节点，则添加newVnode、删除oldVnode（注意添删顺序）。  当newVnode没有Children、或者Children长度为0时，createElement函数将">
+<meta property="og:locale">
+<meta property="og:image" content="https://xujintai123.com/images/pasted-0.png">
+<meta property="article:published_time" content="2021-05-26T05:44:00.000Z">
+<meta property="article:modified_time" content="2021-06-13T03:49:23.809Z">
+<meta property="article:author" content="xujintai">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xujintai123.com/images/pasted-0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://xujintai123.com/2021/05/26/test/"/>
+
+
+
+
+
+  <title>diff算法的Patch函数 | xujintai</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">xujintai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">xujintai的博客网站</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-主页">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-标签">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-分类">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-归档">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xujintai123.com/2021/05/26/test/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/user.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xujintai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">diff算法的Patch函数</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-05-26T13:44:00+08:00">
+                2021-05-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-06-13T11:49:23+08:00">
+                2021-06-13
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Vue2%E6%BA%90%E7%A0%81/" itemprop="url" rel="index">
+                    <span itemprop="name">Vue2源码</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+
+  <span class="post-meta-divider">|</span>
+  <span id="busuanzi_value_page_pv"></span>次阅读
+
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.3k字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="diff算法的Patch函数👍"><a href="#diff算法的Patch函数👍" class="headerlink" title="diff算法的Patch函数👍"></a>diff算法的Patch函数👍</h4><h5 id="🦄-patch（oldVnode，newVnode）"><a href="#🦄-patch（oldVnode，newVnode）" class="headerlink" title="🦄 patch（oldVnode，newVnode）"></a>🦄 patch（oldVnode，newVnode）</h5><h6 id="1-判断oldVnode是否为DOM，若是DOM则转化为Vnode。"><a href="#1-判断oldVnode是否为DOM，若是DOM则转化为Vnode。" class="headerlink" title="1.判断oldVnode是否为DOM，若是DOM则转化为Vnode。"></a>1.判断oldVnode是否为DOM，若是DOM则转化为Vnode。</h6><h6 id="2-比较oldVnode与newVnode是否为相同节点。"><a href="#2-比较oldVnode与newVnode是否为相同节点。" class="headerlink" title="2.比较oldVnode与newVnode是否为相同节点。"></a>2.比较oldVnode与newVnode是否为相同节点。</h6><ol>
+<li><p>若不是相同节点，则添加newVnode、删除oldVnode（注意添删顺序）。</p>
+<ol>
+<li>当<strong>newVnode没有Children、或者Children长度为0</strong>时，createElement函数将创建的DOM填充text然后返回创建DOM。</li>
+<li>当<strong>newVnode有Children属性并且长度不为0</strong>时，createElement函数遍历newVnode的<strong>children属性中的Vnode</strong>，将这些Vnode依次createElement递归，并将返回结果使用创建的DOM进行appendChild，最后返回这个DOM元素。</li>
+<li>createElement函数创建返回DOM在Patch函数中进行insertBefore。<strong>注意：一旦调用了 createElement(newVnode)就意味着生成了新的DOM元素，并且newVnode的elm属性指向这个DOM元素。</strong></li>
+</ol>
+</li>
+<li><p>若是相同节点：</p>
+</li>
+</ol>
+<p><img src="/../images/pasted-0.png" alt="diff" title="diff算法"></p>
+<h6 id="当新旧节点都具有Children-子节点-时，进行精细化比较：updateChildren-旧节点DOM-旧节点-新节点-，具体逻辑代码实现如下所示："><a href="#当新旧节点都具有Children-子节点-时，进行精细化比较：updateChildren-旧节点DOM-旧节点-新节点-，具体逻辑代码实现如下所示：" class="headerlink" title="当新旧节点都具有Children(子节点)时，进行精细化比较：updateChildren(旧节点DOM,旧节点,新节点)，具体逻辑代码实现如下所示："></a>当新旧节点都具有Children(子节点)时，进行精细化比较：updateChildren(旧节点DOM,旧节点,新节点)，具体逻辑代码实现如下所示：</h6><div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line">export default function updateChildren(parentElm, oldCh, newCh) &#123;</span><br><span class="line">    //parentElm:旧节点DOM, oldCh：旧节点, newCh：新节点</span><br><span class="line">    console.log(oldCh, newCh);</span><br><span class="line"></span><br><span class="line">    // 旧节点前指针</span><br><span class="line">    let oldStartIdx = 0;</span><br><span class="line">    // 新节点前指针</span><br><span class="line">    let newStartIdx = 0;</span><br><span class="line">    // 旧节点后指针</span><br><span class="line">    let oldEndIdx = oldCh.length - 1;</span><br><span class="line">    // 新节点后指针</span><br><span class="line">    let newEndIdx = newCh.length - 1;</span><br><span class="line">    // 旧前节点(旧节点前指针所指向节点)</span><br><span class="line">    let oldStartVnode = oldCh[0];</span><br><span class="line">    // 旧后节点</span><br><span class="line">    let oldEndVnode = oldCh[oldEndIdx];</span><br><span class="line">    // 新前节点</span><br><span class="line">    let newStartVnode = newCh[0];</span><br><span class="line">    // 新后节点</span><br><span class="line">    let newEndVnode = newCh[newEndIdx];</span><br><span class="line"></span><br><span class="line">    let keyMap = null;</span><br><span class="line"></span><br><span class="line">    // 开始while循环</span><br><span class="line">    while (oldStartIdx &lt;= oldEndIdx &amp;&amp; newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">        // 首先不是判断①②③④命中，而是要略过已经加undefined标记的东西</span><br><span class="line">        if (oldStartVnode == null || oldCh[oldStartIdx] == undefined) &#123;</span><br><span class="line">            oldStartVnode = oldCh[++oldStartIdx];</span><br><span class="line">        &#125; else if (oldEndVnode == null || oldCh[oldEndIdx] == undefined) &#123;</span><br><span class="line">            oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">        &#125; else if (newStartVnode == null || newCh[newStartIdx] == undefined) &#123;</span><br><span class="line">            newStartVnode = newCh[++newStartIdx];</span><br><span class="line">        &#125; else if (newEndVnode == null || newCh[newEndIdx] == undefined) &#123;</span><br><span class="line">            newEndVnode = newCh[--newEndIdx];</span><br><span class="line">        &#125; else if (checkSameVnode(oldStartVnode, newStartVnode)) &#123;</span><br><span class="line">            // 新前和旧前</span><br><span class="line">            console.log(&#x27;①新前和旧前命中&#x27;);</span><br><span class="line">            patchVnode(oldStartVnode, newStartVnode);//patchVnode：将新节点的变化体现到旧节点</span><br><span class="line">            oldStartVnode = oldCh[++oldStartIdx];</span><br><span class="line">            newStartVnode = newCh[++newStartIdx];</span><br><span class="line">        &#125; else if (checkSameVnode(oldEndVnode, newEndVnode)) &#123;</span><br><span class="line">            // 新后和旧后</span><br><span class="line">            console.log(&#x27;②新后和旧后命中&#x27;);</span><br><span class="line">            patchVnode(oldEndVnode, newEndVnode);</span><br><span class="line">            oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">            newEndVnode = newCh[--newEndIdx];</span><br><span class="line">        &#125; else if (checkSameVnode(oldStartVnode, newEndVnode)) &#123;</span><br><span class="line">            // 新后和旧前</span><br><span class="line">            console.log(&#x27;③新后和旧前命中&#x27;);</span><br><span class="line">            patchVnode(oldStartVnode, newEndVnode);</span><br><span class="line">            // 当③新后与旧前命中的时候，此时要移动节点。移动新前指向的这个节点到老节点的旧后的后面</span><br><span class="line">            // 如何移动节点？？只要你插入一个已经在DOM树上的节点，它就会被移动</span><br><span class="line">            parentElm.insertBefore(oldStartVnode.elm, oldEndVnode.elm.nextSibling);</span><br><span class="line">            oldStartVnode = oldCh[++oldStartIdx];</span><br><span class="line">            newEndVnode = newCh[--newEndIdx];</span><br><span class="line">        &#125; else if (checkSameVnode(oldEndVnode, newStartVnode)) &#123;</span><br><span class="line">            // 新前和旧后</span><br><span class="line">            console.log(&#x27;④新前和旧后命中&#x27;);</span><br><span class="line">            patchVnode(oldEndVnode, newStartVnode);</span><br><span class="line">            // 当④新前和旧后命中的时候，此时要移动节点。移动旧后当前指向的这个节点到旧前的前面</span><br><span class="line">            parentElm.insertBefore(oldEndVnode.elm, oldStartVnode.elm);</span><br><span class="line">            // 如何移动节点？？只要你插入一个已经在DOM树上的节点，它就会被移动</span><br><span class="line">            oldEndVnode = oldCh[--oldEndIdx];</span><br><span class="line">            newStartVnode = newCh[++newStartIdx];</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            // 四种命中都没有命中</span><br><span class="line">            // 制作keyMap一个映射对象，这样就不用每次都遍历老对象了。</span><br><span class="line">            if (!keyMap) &#123;</span><br><span class="line">                keyMap = &#123;&#125;;</span><br><span class="line">                // 从oldStartIdx开始，到oldEndIdx结束，创建keyMap映射对象：映射旧节点的所有key值</span><br><span class="line">                for (let i = oldStartIdx; i &lt;= oldEndIdx; i++) &#123;</span><br><span class="line">                    const key = oldCh[i].key;</span><br><span class="line">                    if (key != undefined) &#123;</span><br><span class="line">                        keyMap[key] = i;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            console.log(keyMap);</span><br><span class="line">            // 寻找当前这项（newStartIdx）在keyMap中的映射的位置序号</span><br><span class="line">            const idxInOld = keyMap[newStartVnode.key];</span><br><span class="line">            console.log(idxInOld);</span><br><span class="line">            if (idxInOld == undefined) &#123;</span><br><span class="line">                // 判断，如果idxInOld是undefined表示它是全新的项</span><br><span class="line">                // 被加入的项（就是newStartVnode这项)现不是真正的DOM节点</span><br><span class="line">                parentElm.insertBefore(createElement(newStartVnode), oldStartVnode.elm);</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 如果不是undefined，不是全新的项，而是要移动</span><br><span class="line">                const elmToMove = oldCh[idxInOld];</span><br><span class="line">                patchVnode(elmToMove, newStartVnode);</span><br><span class="line">                // 把这项设置为undefined，表示我已经处理完这项了</span><br><span class="line">                oldCh[idxInOld] = undefined;</span><br><span class="line">                // 移动，调用insertBefore也可以实现移动。</span><br><span class="line">                parentElm.insertBefore(elmToMove.elm, oldStartVnode.elm);</span><br><span class="line">            &#125;</span><br><span class="line">            // 指针下移，只移动新的头</span><br><span class="line">            newStartVnode = newCh[++newStartIdx];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 继续看看有没有剩余的。循环结束了start还是比old小</span><br><span class="line">    if (newStartIdx &lt;= newEndIdx) &#123;</span><br><span class="line">        console.log(&#x27;new还有剩余节点没有处理，要加项。要把所有剩余的节点，都要插入到oldStartIdx之前&#x27;);</span><br><span class="line">        // 遍历新的newCh，添加到老的没有处理的之前</span><br><span class="line">        for (let i = newStartIdx; i &lt;= newEndIdx; i++) &#123;</span><br><span class="line">            // insertBefore方法可以自动识别null，如果是null就会自动排到队尾去。和appendChild是一致了。</span><br><span class="line">            // newCh[i]现在还没有真正的DOM，所以要调用createElement()函数变为DOM</span><br><span class="line">            parentElm.insertBefore(createElement(newCh[i]), oldCh[oldStartIdx].elm);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else if (oldStartIdx &lt;= oldEndIdx) &#123;</span><br><span class="line">        console.log(&#x27;old还有剩余节点没有处理，要删除项&#x27;);</span><br><span class="line">        // 批量删除oldStart和oldEnd指针之间的项</span><br><span class="line">        for (let i = oldStartIdx; i &lt;= oldEndIdx; i++) &#123;</span><br><span class="line">            if (oldCh[i]) &#123;</span><br><span class="line">                parentElm.removeChild(oldCh[i].elm);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<h5 id="意义"><a href="#意义" class="headerlink" title="意义"></a>意义</h5><h6 id="Diff算法实现最小化更新。不仅仅在Vue中，包括git中的文件管理也用到了Diff算法。在Vue中，若对应的新旧节点为相同元素且key值相同时，diff算法会进行复用旧节点。数据更新时-仅更新元素的值、增删元素时在旧节点基础上进行DOM元素的增删操作。"><a href="#Diff算法实现最小化更新。不仅仅在Vue中，包括git中的文件管理也用到了Diff算法。在Vue中，若对应的新旧节点为相同元素且key值相同时，diff算法会进行复用旧节点。数据更新时-仅更新元素的值、增删元素时在旧节点基础上进行DOM元素的增删操作。" class="headerlink" title="Diff算法实现最小化更新。不仅仅在Vue中，包括git中的文件管理也用到了Diff算法。在Vue中，若对应的新旧节点为相同元素且key值相同时，diff算法会进行复用旧节点。数据更新时:仅更新元素的值、增删元素时在旧节点基础上进行DOM元素的增删操作。"></a>Diff算法实现最小化更新。不仅仅在Vue中，包括git中的文件管理也用到了Diff算法。在Vue中，若对应的新旧节点为相同元素且key值相同时，diff算法会进行复用旧节点。数据更新时:仅更新元素的值、增删元素时在旧节点基础上进行DOM元素的增删操作。</h6>
+      
+    </div>
+    
+    
+    
+
+     
+       <div>
+            <div>
+  
+    <div style="text-align:center;color:#bfbfbf;font-size:16px;">
+      <span>-------- 本文结束 </span>
+      <i class="fa fa-paw"></i>
+      <span> 感谢阅读 --------</span>
+    </div>
+  
+</div>
+       </div>
+     
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>请作者喝杯咖啡!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt=" 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vue/" rel="tag"># Vue</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/05/24/%E6%AC%A2%E8%BF%8E%E6%9D%A5%E5%88%B0XuJinTai-com/" rel="next" title="欢迎来到XuJinTai123.com">
+                <i class="fa fa-chevron-left"></i> 欢迎来到XuJinTai123.com
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/05/28/Vue2%E7%9A%84%E5%93%8D%E5%BA%94%E5%BC%8F%E5%8E%9F%E7%90%86/" rel="prev" title="Vue2的响应式原理">
+                Vue2的响应式原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+ <!--网易云插件-->
+<div id="music163player">
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=280 height=86 src="//music.163.com/outchain/player?type=2&id=1462875618&auto=0&height=66">
+    </iframe>
+</div>
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/user.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#diff%E7%AE%97%E6%B3%95%E7%9A%84Patch%E5%87%BD%E6%95%B0%F0%9F%91%8D"><span class="nav-number">1.</span> <span class="nav-text">diff算法的Patch函数👍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%F0%9F%A6%84-patch%EF%BC%88oldVnode%EF%BC%8CnewVnode%EF%BC%89"><span class="nav-number">1.1.</span> <span class="nav-text">🦄 patch（oldVnode，newVnode）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-%E5%88%A4%E6%96%ADoldVnode%E6%98%AF%E5%90%A6%E4%B8%BADOM%EF%BC%8C%E8%8B%A5%E6%98%AFDOM%E5%88%99%E8%BD%AC%E5%8C%96%E4%B8%BAVnode%E3%80%82"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.判断oldVnode是否为DOM，若是DOM则转化为Vnode。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-%E6%AF%94%E8%BE%83oldVnode%E4%B8%8EnewVnode%E6%98%AF%E5%90%A6%E4%B8%BA%E7%9B%B8%E5%90%8C%E8%8A%82%E7%82%B9%E3%80%82"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.比较oldVnode与newVnode是否为相同节点。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%BD%93%E6%96%B0%E6%97%A7%E8%8A%82%E7%82%B9%E9%83%BD%E5%85%B7%E6%9C%89Children-%E5%AD%90%E8%8A%82%E7%82%B9-%E6%97%B6%EF%BC%8C%E8%BF%9B%E8%A1%8C%E7%B2%BE%E7%BB%86%E5%8C%96%E6%AF%94%E8%BE%83%EF%BC%9AupdateChildren-%E6%97%A7%E8%8A%82%E7%82%B9DOM-%E6%97%A7%E8%8A%82%E7%82%B9-%E6%96%B0%E8%8A%82%E7%82%B9-%EF%BC%8C%E5%85%B7%E4%BD%93%E9%80%BB%E8%BE%91%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%A6%82%E4%B8%8B%E6%89%80%E7%A4%BA%EF%BC%9A"><span class="nav-number">1.1.3.</span> <span class="nav-text">当新旧节点都具有Children(子节点)时，进行精细化比较：updateChildren(旧节点DOM,旧节点,新节点)，具体逻辑代码实现如下所示：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%84%8F%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">意义</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Diff%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%9C%80%E5%B0%8F%E5%8C%96%E6%9B%B4%E6%96%B0%E3%80%82%E4%B8%8D%E4%BB%85%E4%BB%85%E5%9C%A8Vue%E4%B8%AD%EF%BC%8C%E5%8C%85%E6%8B%ACgit%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E4%B9%9F%E7%94%A8%E5%88%B0%E4%BA%86Diff%E7%AE%97%E6%B3%95%E3%80%82%E5%9C%A8Vue%E4%B8%AD%EF%BC%8C%E8%8B%A5%E5%AF%B9%E5%BA%94%E7%9A%84%E6%96%B0%E6%97%A7%E8%8A%82%E7%82%B9%E4%B8%BA%E7%9B%B8%E5%90%8C%E5%85%83%E7%B4%A0%E4%B8%94key%E5%80%BC%E7%9B%B8%E5%90%8C%E6%97%B6%EF%BC%8Cdiff%E7%AE%97%E6%B3%95%E4%BC%9A%E8%BF%9B%E8%A1%8C%E5%A4%8D%E7%94%A8%E6%97%A7%E8%8A%82%E7%82%B9%E3%80%82%E6%95%B0%E6%8D%AE%E6%9B%B4%E6%96%B0%E6%97%B6-%E4%BB%85%E6%9B%B4%E6%96%B0%E5%85%83%E7%B4%A0%E7%9A%84%E5%80%BC%E3%80%81%E5%A2%9E%E5%88%A0%E5%85%83%E7%B4%A0%E6%97%B6%E5%9C%A8%E6%97%A7%E8%8A%82%E7%82%B9%E5%9F%BA%E7%A1%80%E4%B8%8A%E8%BF%9B%E8%A1%8CDOM%E5%85%83%E7%B4%A0%E7%9A%84%E5%A2%9E%E5%88%A0%E6%93%8D%E4%BD%9C%E3%80%82"><span class="nav-number">1.2.1.</span> <span class="nav-text">Diff算法实现最小化更新。不仅仅在Vue中，包括git中的文件管理也用到了Diff算法。在Vue中，若对应的新旧节点为相同元素且key值相同时，diff算法会进行复用旧节点。数据更新时:仅更新元素的值、增删元素时在旧节点基础上进行DOM元素的增删操作。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">xujintai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">2.9k</span>
+  
+</div>
+
+
+
+
+
+
+  <span class="post-meta-divider"></span>
+
+
+
+
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style='display:none'>
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style='display:none'>
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+  <div class="powered-by">
+  <span id="timeDate">
+  </span>
+  <span id="times">
+  </span>
+  </div>
+
+
+
+
+    <script>
+      var now = new Date(); 
+      function createtime() { 
+          var grt= new Date("05/24/2021 12:00:00");//此处修改你的建站时间或者网站上线时间 
+          now.setTime(now.getTime()+250); 
+          days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+          hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+          if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+          mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+          seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+          snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+          document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+          document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+      } 
+  setInterval("createtime()",250);
+  </script>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #333;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+  
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('/n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/src/fireworks.js"></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/shizuku.model.json"},"display":{"position":"left","width":200,"height":400},"mobile":{"show":false},"log":false});</script></body>
+</html>
