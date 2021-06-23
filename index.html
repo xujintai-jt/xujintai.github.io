@@ -487,7 +487,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-06-23T20:34:09+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2021-06-23T21:07:13+08:00">
                 2021-06-23
               </time>
             
@@ -539,7 +539,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  9字
+                  316字
                 </span>
               
 
@@ -578,9 +578,16 @@
       
         
           
-            <h4 id="I-am-a-coder😎"><a href="#I-am-a-coder😎" class="headerlink" title="I am a coder😎"></a>I am a coder😎</h4><h4 id="想了解更多🤣"><a href="#想了解更多🤣" class="headerlink" title="想了解更多🤣"></a>想了解更多🤣</h4><p><img src="/images/pasted-1.png" alt="upload successful"></p>
-<p><img src="/images/pasted-2.png" alt="upload successful"></p>
-<p><img src="/images/pasted-3.png" alt="upload successful"></p>
+            <h4 id="待编译的ts文件集合中不同文件全局定义的块作用域变量，变量名重复问题？"><a href="#待编译的ts文件集合中不同文件全局定义的块作用域变量，变量名重复问题？" class="headerlink" title="待编译的ts文件集合中不同文件全局定义的块作用域变量，变量名重复问题？"></a>待编译的ts文件集合中不同文件全局定义的块作用域变量，变量名重复问题？</h4><p><img src="/images/pasted-1.png" alt="upload successful"></p>
+<h6 id="图1为此项目的ts配置文件，其中“-src-”意为src文件夹下的所有ts文件都被指定（即这些文件中全局定义的块作用域变量名称不能重复）。"><a href="#图1为此项目的ts配置文件，其中“-src-”意为src文件夹下的所有ts文件都被指定（即这些文件中全局定义的块作用域变量名称不能重复）。" class="headerlink" title="图1为此项目的ts配置文件，其中“./src/**/*”意为src文件夹下的所有ts文件都被指定（即这些文件中全局定义的块作用域变量名称不能重复）。"></a>图1为此项目的ts配置文件，其中“./src/**/*”意为src文件夹下的所有ts文件都被指定（即这些文件中全局定义的块作用域变量名称不能重复）。</h6><p><img src="/images/pasted-2.png" alt="upload successful"></p>
+<h6 id="图2的‘对象类型-ts文件’中let在全局声明了块作用域变量a1。"><a href="#图2的‘对象类型-ts文件’中let在全局声明了块作用域变量a1。" class="headerlink" title="图2的‘对象类型.ts文件’中let在全局声明了块作用域变量a1。"></a>图2的‘对象类型.ts文件’中let在全局声明了块作用域变量a1。</h6><p><img src="/images/pasted-3.png" alt="upload successful"></p>
+<h6 id="图3的‘类型别名-ts文件’中let在全局声明了块作用域变量a。由于与‘对象类型-ts文件’都是被指定需要编译的ts文件，两个文件在全局重复声明了块作用域变量a1，出现报错“无法重新声明块范围变量“a1””"><a href="#图3的‘类型别名-ts文件’中let在全局声明了块作用域变量a。由于与‘对象类型-ts文件’都是被指定需要编译的ts文件，两个文件在全局重复声明了块作用域变量a1，出现报错“无法重新声明块范围变量“a1””" class="headerlink" title="图3的‘类型别名.ts文件’中let在全局声明了块作用域变量a。由于与‘对象类型.ts文件’都是被指定需要编译的ts文件，两个文件在全局重复声明了块作用域变量a1，出现报错“无法重新声明块范围变量“a1””"></a>图3的‘类型别名.ts文件’中let在全局声明了块作用域变量a。由于与‘对象类型.ts文件’都是被指定需要编译的ts文件，两个文件在全局重复声明了块作用域变量a1，出现报错“无法重新声明块范围变量“a1””</h6><h5 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h5><ul>
+<li>1.需要编译的ts文件集合中的ts文件使用const let在全局声明变量时，不同文件要使用不同变量名称。</li>
+<li>2.使用立即执行函数，避免在全局声明。</li>
+</ul>
+<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/*类型别名.js*/</span><br><span class="line">(function () &#123;</span><br><span class="line">  let a1: 1 | 2 | 3 | 4 | 5 //声明a1</span><br><span class="line">  //类型别名</span><br><span class="line">  type mytype = 1 | 2 | 3 | 4 | 5</span><br><span class="line">  let c: mytype</span><br><span class="line">  c = 5</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/*对象类型.js*/</span><br><span class="line">(function () &#123;</span><br><span class="line">let a1: &#123; name: string, [propName: string]: any &#125;//声明a1</span><br><span class="line">//a = &#123; name: &quot;小明&quot;, age: 22 &#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure></div>
+
 
           
         
@@ -1346,7 +1353,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">2.9k</span>
+    <span title="Site words total count">3.2k</span>
   
 </div>
 
