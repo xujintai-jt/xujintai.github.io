@@ -252,6 +252,188 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xujintai123.com/2021/08/13/JavaScript%E8%BF%90%E7%AE%97%E7%AC%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/user.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xujintai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/08/13/JavaScript%E8%BF%90%E7%AE%97%E7%AC%A6/" itemprop="url">奇妙的CSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-08-13T16:11:25+08:00">
+                2021-08-13
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2021-10-18T20:20:03+08:00">
+                2021-10-18
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  303字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  1分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="别小瞧了position：absolute！"><a href="#别小瞧了position：absolute！" class="headerlink" title="别小瞧了position：absolute！"></a>别小瞧了position：absolute！</h4><h5 id="一、设置了position：absolute的内联元素的display竟然变成了block！"><a href="#一、设置了position：absolute的内联元素的display竟然变成了block！" class="headerlink" title="一、设置了position：absolute的内联元素的display竟然变成了block！"></a>一、设置了position：absolute的内联元素的display竟然变成了block！</h5><ul>
+<li><p>例1: 行内元素的height、width默认为值auto；当我们直接给行内元素加height，width时，单纯的只是其值发生变化，但在html上并没有实际的渲染。（我们可以通过控制台选中padding时，sapn被全部标出来看出这一点）<br><img src="/images/pasted-6.png" alt="upload successful"></p>
+</li>
+<li><p>例2: 接下来神奇的地方来了。当我们为行内元素span设置了position：absolute时，我们通过控制台可以看到它的dispaly被改变为了block。</p>
+</li>
+</ul>
+<p><img src="/images/pasted-7.png" alt="upload successful"></p>
+<ul>
+<li>例3: 我们尝试将span设置为inline-block，通过控制台依旧可以看到它的dispaly被改变为了block。<br><img src="/images/pasted-9.png" alt="upload successful"></li>
+</ul>
+<h5 id="二、-即使span由于设置position：absolute变为block，它仍然不能像直接设置display-block那样成为独占一行‘块元素’-当然，就算给sapn设置display-block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论-。"><a href="#二、-即使span由于设置position：absolute变为block，它仍然不能像直接设置display-block那样成为独占一行‘块元素’-当然，就算给sapn设置display-block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论-。" class="headerlink" title="二、 即使span由于设置position：absolute变为block，它仍然不能像直接设置display:block那样成为独占一行‘块元素’(当然，就算给sapn设置display:block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论)。"></a>二、 即使span由于设置position：absolute变为block，它仍然不能像直接设置display:block那样成为独占一行‘块元素’(当然，就算给sapn设置display:block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论)。</h5><ul>
+<li><p>例1: span设置position：absolute变为block，但不能独占一行。<br><img src="/images/pasted-10.png" alt="upload successful"></p>
+</li>
+<li><p>例2: span设置display:block，独占一行。<br><img src="/images/pasted-11.png" alt="upload successful"></p>
+</li>
+</ul>
+<h5 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h5><h6 id="内联元素通过设置position：absolute变为可以设置宽高的block，但并不具备独占一行的能力。"><a href="#内联元素通过设置position：absolute变为可以设置宽高的block，但并不具备独占一行的能力。" class="headerlink" title="内联元素通过设置position：absolute变为可以设置宽高的block，但并不具备独占一行的能力。"></a>内联元素通过设置position：absolute变为可以设置宽高的block，但并不具备独占一行的能力。</h6>
+          
+        
+      
+    </div>
+    
+    
+    
+
+     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://xujintai123.com/2021/08/03/vue%E4%B8%ADmethods%E4%B8%8Ecomputed%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1659,7 +1841,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1732,7 +1914,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">3.7k</span>
+    <span title="Site words total count">4k</span>
   
 </div>
 
