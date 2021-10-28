@@ -299,8 +299,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-10-21T20:09:09+08:00">
-                2021-10-21
+              <time title="更新于" itemprop="dateModified" datetime="2021-10-28T20:09:10+08:00">
+                2021-10-28
               </time>
             
           </span>
@@ -329,7 +329,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  304字
+                  378字
                 </span>
               
 
@@ -374,8 +374,9 @@
 <h5 id="二、可设置值为auto的横向格式化属性"><a href="#二、可设置值为auto的横向格式化属性" class="headerlink" title="二、可设置值为auto的横向格式化属性"></a>二、可设置值为auto的横向格式化属性</h5><ul>
 <li>其中有三个横向格式化属性可以将值设置为auto，分别为margin-left、width、margin-right。</li>
 </ul>
-<h5 id="三、auto可以做什么？"><a href="#三、auto可以做什么？" class="headerlink" title="三、auto可以做什么？"></a>三、auto可以做什么？</h5><ul>
+<h5 id="三、给水平margin以及width设置auto可以做什么？"><a href="#三、给水平margin以及width设置auto可以做什么？" class="headerlink" title="三、给水平margin以及width设置auto可以做什么？"></a>三、给水平margin以及width设置auto可以做什么？</h5><ul>
 <li>自动计算元素容纳块的剩余宽度值，无法计算时会遵循以下规律。比如：当margin-left、width、margin-right值都设置为auto时，margin-left和margin-right会被设置为0，width等于元素容纳块的宽度；如果3个属性都设置为具体值,那么margin-right会被强制设置为auto。</li>
+<li>若所有的横向格式化属性设置的值之和大于了元素容纳块的宽度，那么margin-right会被设置为负值，并最后使所有的横向格式化属性的值之和等于元素容纳块的宽度。</li>
 </ul>
 <h5 id="四、再次实现一下水平居中？"><a href="#四、再次实现一下水平居中？" class="headerlink" title="四、再次实现一下水平居中？"></a>四、再次实现一下水平居中？</h5><ul>
 <li>元素定宽，左右margin值auto。（老生常谈）</li>
@@ -2095,7 +2096,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">4.4k</span>
+    <span title="Site words total count">4.5k</span>
   
 </div>
 
