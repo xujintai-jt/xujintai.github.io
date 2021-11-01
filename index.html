@@ -714,7 +714,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-11-01T21:02:22+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2021-11-01T21:10:54+08:00">
                 2021-11-01
               </time>
             
@@ -766,7 +766,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  410字
+                  467字
                 </span>
               
 
@@ -805,7 +805,7 @@
       
         
           
-            <h4 id="别小瞧了position：absolute！"><a href="#别小瞧了position：absolute！" class="headerlink" title="别小瞧了position：absolute！"></a>别小瞧了position：absolute！</h4><h5 id="一、设置了position：absolute的内联元素的display竟然变成了block！"><a href="#一、设置了position：absolute的内联元素的display竟然变成了block！" class="headerlink" title="一、设置了position：absolute的内联元素的display竟然变成了block！"></a>一、设置了position：absolute的内联元素的display竟然变成了block！</h5><ul>
+            <h4 id="别小瞧了position：absolute！"><a href="#别小瞧了position：absolute！" class="headerlink" title="别小瞧了position：absolute！"></a>别小瞧了position：absolute！</h4><h6 id="一、设置了position：absolute的内联元素的display竟然变成了block！"><a href="#一、设置了position：absolute的内联元素的display竟然变成了block！" class="headerlink" title="一、设置了position：absolute的内联元素的display竟然变成了block！"></a>一、设置了position：absolute的内联元素的display竟然变成了block！</h6><ul>
 <li>例1: 行内元素的height、width默认为值auto；当我们直接给行内元素加height，width时，单纯的只是其值发生变化，但在html上并没有实际的渲染。（我们可以通过控制台选中padding时，sapn被全部标出来看出这一点）</li>
 </ul>
 <img src="/images/pasted-6.png" width="75%">
@@ -817,7 +817,7 @@
 - 例3: 我们尝试将span设置为inline-block，通过控制台依旧可以看到它的dispaly被改变为了block。
 <img src="/images/pasted-9.png" width="75%">
 
-<h5 id="二、-即使span由于设置position：absolute变为block，它仍然不能像直接设置display-block那样成为独占一行‘块元素’-当然，就算给span设置display-block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论-。"><a href="#二、-即使span由于设置position：absolute变为block，它仍然不能像直接设置display-block那样成为独占一行‘块元素’-当然，就算给span设置display-block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论-。" class="headerlink" title="二、 即使span由于设置position：absolute变为block，它仍然不能像直接设置display:block那样成为独占一行‘块元素’(当然，就算给span设置display:block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论)。"></a>二、 即使span由于设置position：absolute变为block，它仍然不能像直接设置display:block那样成为独占一行‘块元素’(当然，就算给span设置display:block，它也不会成为像div那样真正意义的块元素，这里不进行展开讨论)。</h5><ul>
+<h6 id="二、-即使span设置position：absolute变为block，它仍不能像直接设置display-block的span那样成为独占一行‘块元素’-当然，就算给span设置display-block，它也不会成为div那样真正的块元素，这里不展开讨论-。"><a href="#二、-即使span设置position：absolute变为block，它仍不能像直接设置display-block的span那样成为独占一行‘块元素’-当然，就算给span设置display-block，它也不会成为div那样真正的块元素，这里不展开讨论-。" class="headerlink" title="二、 即使span设置position：absolute变为block，它仍不能像直接设置display:block的span那样成为独占一行‘块元素’(当然，就算给span设置display:block，它也不会成为div那样真正的块元素，这里不展开讨论)。"></a>二、 即使span设置position：absolute变为block，它仍不能像直接设置display:block的span那样成为独占一行‘块元素’(当然，就算给span设置display:block，它也不会成为div那样真正的块元素，这里不展开讨论)。</h6><ul>
 <li><p>例1: span设置position：absolute变为block，但不能独占一行。</p>
 <img src="/images/pasted-10.png" width="75%"></li>
 <li><p>例2: span设置display:block，独占一行。</p>
@@ -825,7 +825,7 @@
 <li><p>例3: 当然，块级元素设置position：absolute后，也变成不能独占一行的block。</p>
 <img src="/images/pasted-23.png" width="75%"></li>
 </ul>
-<h5 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h5><h6 id="通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。"><a href="#通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。" class="headerlink" title="通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。"></a>通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。</h6><div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> &lt;style&gt;</span><br><span class="line">        * &#123;</span><br><span class="line">            padding: 0;</span><br><span class="line">            margin: 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .container &#123;</span><br><span class="line">            position: relative;</span><br><span class="line">            height: 300px;</span><br><span class="line">            padding: 50px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .son &#123;</span><br><span class="line">            position: absolute;</span><br><span class="line">            /* display: block; */</span><br><span class="line">            height: 100px;</span><br><span class="line">            width: 100px;</span><br><span class="line">            padding: 50px;</span><br><span class="line">            background-color: gray;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;son&quot;&gt;&lt;/span&gt;</span><br><span class="line">        &lt;div class=&quot;son&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure></div>
+<h5 id="三、总结"><a href="#三、总结" class="headerlink" title="三、总结"></a>三、总结</h5><h6 id="通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。同时，正因为设置了绝对定位的元素行为更像是inline-block（个人理解），所以元素可以设置外边距（margins），且不会与其他边距合并。（块级元素相邻纵向外边距会发生合并）"><a href="#通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。同时，正因为设置了绝对定位的元素行为更像是inline-block（个人理解），所以元素可以设置外边距（margins），且不会与其他边距合并。（块级元素相邻纵向外边距会发生合并）" class="headerlink" title="通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。同时，正因为设置了绝对定位的元素行为更像是inline-block（个人理解），所以元素可以设置外边距（margins），且不会与其他边距合并。（块级元素相邻纵向外边距会发生合并）"></a>通过设置position：absolute，元素变为可以设置宽高的block（行为更像是inline-block），但并不具备独占一行的能力。同时，正因为设置了绝对定位的元素行为更像是inline-block（个人理解），所以元素可以设置外边距（margins），且不会与其他边距合并。（块级元素相邻纵向外边距会发生合并）</h6><div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"> &lt;style&gt;</span><br><span class="line">        * &#123;</span><br><span class="line">            padding: 0;</span><br><span class="line">            margin: 0;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .container &#123;</span><br><span class="line">            position: relative;</span><br><span class="line">            height: 300px;</span><br><span class="line">            padding: 50px;</span><br><span class="line">            background-color: pink;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        .son &#123;</span><br><span class="line">            position: absolute;</span><br><span class="line">            /* display: block; */</span><br><span class="line">            height: 100px;</span><br><span class="line">            width: 100px;</span><br><span class="line">            padding: 50px;</span><br><span class="line">            background-color: gray;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line"></span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;div class=&quot;container&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;son&quot;&gt;&lt;/span&gt;</span><br><span class="line">        &lt;div class=&quot;son&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br></pre></td></tr></table></figure></div>
           
         
       
@@ -2355,7 +2355,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">5k</span>
+    <span title="Site words total count">5.1k</span>
   
 </div>
 
