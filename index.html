@@ -1273,7 +1273,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/06/23/JavaScript%E5%BC%82%E6%AD%A5/" itemprop="url">JavaScript异步</a></h1>
+                <a class="post-title-link" href="/2021/06/23/JavaScript%E5%BC%82%E6%AD%A5/" itemprop="url">Async 小技巧1</a></h1>
         
 
         <div class="post-meta">
@@ -1301,8 +1301,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2021-06-23T20:08:57+08:00">
-                2021-06-23
+              <time title="更新于" itemprop="dateModified" datetime="2021-12-12T23:07:38+08:00">
+                2021-12-12
               </time>
             
           </span>
@@ -1353,7 +1353,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0字
+                  596字
                 </span>
               
 
@@ -1369,7 +1369,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1分钟
+                  2分钟
                 </span>
               
             </div>
@@ -1392,7 +1392,23 @@
       
         
           
-            
+            <p>例1. async1函数里面await async2函数，根据async函数返回的是一个promise以及事件循环机制，（可以参考<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903512845860872%EF%BC%89">https://juejin.cn/post/6844903512845860872）</a><br>我们很容易可以看出async1函数里面的’一些同步代码’一定是在async2函数里面<code>const res = 返回值</code>之前执行的。</p>
+<ul>
+<li>1.async1函数执行完所有同步代码以后会进行return，由于没有返回值，默认返回一个状态为resolve的值为undefined的pormise实例。</li>
+<li>2.async2函数会等待右侧的promise状态resolve后将<code>const res = 返回值</code>以及async2函数体内<code>const res = await async1();</code>以下的代码（下文简称为await后的代码）进行注册到Event Table，由于是微任务，直接放入Event Queue。此时主线程执行栈为空，所以直接将await后的代码放入主执行栈执行。<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">     ...一些同步代码;</span><br><span class="line">    console.log(&quot;a&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function async2() &#123;</span><br><span class="line">     const res = await async1();</span><br><span class="line">     console.log(&#x27;res&#x27;, res);</span><br><span class="line">     console.log(&quot;b&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async1(); // &#x27;a&#x27;; &#x27;res&#x27;,undefined ; &#x27;b&#x27;;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>例2. 那如果我们在async1函数里面进行微任务呢，执行顺序会怎样？</p>
+<ul>
+<li>1.async1中3-5行的代码会立即调用then函数，then函数中的回调也会立即在Event Table中注册，随后async1函数执行完毕返回一个状态为resolve的值为undefined的pormise实例。</li>
+<li>2.async2中在调用async1得到状态为resolve的promise返回值后将async2中’await后的代码’进行注册到Event Table中，由于注册的先后顺序，决定了’e’在’b’前打印。<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">     ...一些同步代码;</span><br><span class="line">     Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">         console.log(&quot;e&quot;);</span><br><span class="line">     &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function async2() &#123;</span><br><span class="line">     const res = await async1();</span><br><span class="line">     console.log(&#x27;res&#x27;, res);</span><br><span class="line">     console.log(&quot;b&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async1(); // &#x27;e&#x27;; &#x27;res&#x27;,undefined ; &#x27;b&#x27;;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>例3. vue中nextTick中指定的回调函数也是微任务，所以下面代码与例2原理相同。</p>
+<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">created() &#123;</span><br><span class="line">    this.async2();</span><br><span class="line">&#125;</span><br><span class="line">, </span><br><span class="line">methods: &#123;</span><br><span class="line">    async async1() &#123;</span><br><span class="line">        this.$nextTick(() =&gt; &#123;</span><br><span class="line">            console.log(&#x27;async1:nextTick&#x27;);</span><br><span class="line">        &#125;)</span><br><span class="line">        Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">            console.log(&quot;e&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    async async2() &#123;</span><br><span class="line">        const res = await this.async1();</span><br><span class="line">        console.log(&#x27;res&#x27;, res);</span><br><span class="line">        console.log(&quot;b&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;  // &#x27;async1:nextTick&#x27;; &#x27;e&#x27;; &#x27;res&#x27;,undefined ; &#x27;b&#x27;;</span><br></pre></td></tr></table></figure></div>
+<p>例4. 🦄️ 会输出什么呢？</p>
+<div class="highlight-wrap"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="PLAINTEXT"><figure class="iseeu highlight /plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">async function async1() &#123;</span><br><span class="line">    Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">        Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">            console.log(&quot;e&quot;);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">async function async2() &#123;</span><br><span class="line">    const res = await async1();</span><br><span class="line">    console.log(&#x27;res&#x27;, res);</span><br><span class="line">    console.log(&quot;b&quot;);</span><br><span class="line">    Promise.resolve().then(() =&gt; &#123;</span><br><span class="line">        console.log(&quot;qqq&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line">async2();</span><br></pre></td></tr></table></figure></div>
+
+
+
           
         
       
@@ -2355,7 +2371,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">5.1k</span>
+    <span title="Site words total count">5.7k</span>
   
 </div>
 
